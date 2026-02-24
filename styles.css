@@ -50,6 +50,10 @@ body {
     padding: 15px;
 }
 
+.operation {
+    display: flex;
+}
+
 .result {
     color: white;
     font-weight: 700;
