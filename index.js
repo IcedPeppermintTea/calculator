@@ -2,12 +2,11 @@
 const container = document.querySelector(".container");
 const display = document.querySelector(".display");
 const calculatorButtons = document.querySelector(".buttons");
-let num1, num2, operator; // to be used in actual calculations
 
 // arrays with button options
 const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
-const operators = ["%", "/", "*", "-", "+", "="]
-const keys = ["AC", "B"]
+const operators = ["%", "/", "*", "-", "+"]
+const keys = ["=", "AC", "B"]
 
 /*generate calculator buttons*/
 numbers.forEach(num => {
@@ -42,6 +41,20 @@ keys.forEach(key => {
     // append to calculatorButtons
     calculatorButtons.appendChild(btn);
 });
+
+const numButtons = document.querySelectorAll(".num-button");
+const opButtons = document.querySelectorAll(".op-button");
+let displayNum1 = document.querySelector("#num1");
+let displayNum2 = document.querySelector("#num2");
+let displayOperator = document.querySelector("#operator");
+const result = document.querySelector(".result");
+
+// to be used in actual calculations
+let num1 = "";
+let num2 = "";
+let operator = "";
+let currentInput = "first" // track calculator state, firstNum, secondNum, etc.
+
 
 /* mathematical functions */
 // add
@@ -84,4 +97,43 @@ function operate(num1, num2, operator) {
     }
 }
 
+// add event listeners for calculator num buttons
+numButtons.forEach((button => {
+    button.addEventListener("click", e => {
+        if (currentInput == "first") {
+            getFirstNum(e.target.textContent);
+        }
+        else if (currentInput == "second") {
+            getSecondNum(e.target.textContent);
+        }
+    });
+}));
+
+// add event listener for calculator operator buttons
+opButtons.forEach(button => {
+    button.addEventListener("click", e => {
+        getOperator(e.target.textContent);
+    });
+});
+
+// get first value and display in screen
+function getFirstNum(value) {
+    num1 += value;
+    displayNum1.textContent += num1;
+}
+
+// get operator value and display in screen
+function getOperator(value) {
+    operator = value;
+    currentInput = "second";
+    displayOperator.textContent = operator;
+    console.log(operator);
+}
+
+// get second value and display in screen
+function getSecondNum(value) {
+    num2 += value;
+    displayNum2.textContent += num2;
+    console.log(num2);
+}
 
