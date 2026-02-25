@@ -44,10 +44,11 @@ keys.forEach(key => {
 
 const numButtons = document.querySelectorAll(".num-button");
 const opButtons = document.querySelectorAll(".op-button");
+const keyButtons = document.querySelectorAll(".key-button");
 let displayNum1 = document.querySelector("#num1");
 let displayNum2 = document.querySelector("#num2");
 let displayOperator = document.querySelector("#operator");
-const result = document.querySelector(".result");
+let result = document.querySelector(".result");
 
 // to be used in actual calculations
 let num1 = "";
@@ -59,7 +60,7 @@ let currentInput = "first" // track calculator state, firstNum, secondNum, etc.
 /* mathematical functions */
 // add
 function add(num1, num2) {
-    return num1 + num2;
+    return Number(num1) + Number(num2);
 }
 // subtract
 function subtract(num1, num2) {
@@ -82,19 +83,21 @@ function modulo(num1, num2) {
 function operate(num1, num2, operator) {
     switch(operator) {
         case "+":
-            add(num1, num2);
+            result.textContent = add(num1, num2);
             break;
         case "-":
-            subtract(num1, num2);
+            result.textContent = subtract(num1, num2);
             break;
         case "*":
-            multiply(num1, num2);
+            result.textContent = multiply(num1, num2);
             break;
         case "/":
-            divide(num1, num2);
+            result.textContent = divide(num1, num2);
         case "%":
-            modulo(num1, num2);
+            result.textContent = modulo(num1, num2);
     }
+
+    clear(); // clear variables for next iteration
 }
 
 // add event listeners for calculator num buttons
@@ -116,10 +119,27 @@ opButtons.forEach(button => {
     });
 });
 
+// add event listener for key buttons
+keyButtons.forEach(button => {
+    button.addEventListener("click", e => {
+        switch (e.target.textContent) {
+            case "=":
+                currentInput = "operating"
+                operate(num1, num2, operator);
+                break;
+            case "AC":
+                break;
+            case "B":
+                break;
+        }
+    });
+});
+
+
 // get first value and display in screen
 function getFirstNum(value) {
     num1 += value;
-    displayNum1.textContent += num1;
+    displayNum1.textContent = num1;
 }
 
 // get operator value and display in screen
@@ -133,7 +153,17 @@ function getOperator(value) {
 // get second value and display in screen
 function getSecondNum(value) {
     num2 += value;
-    displayNum2.textContent += num2;
+    displayNum2.textContent = num2;
     console.log(num2);
 }
+
+// clear variables for next iteration 
+function clear() {
+    num1 = "";
+    displayNum1.textContent = "";
+    num2 = "";
+    displayNum2.textContent = "";
+    displayOperator.textContent = "";
+}
+
 
