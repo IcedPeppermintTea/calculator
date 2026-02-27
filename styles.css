@@ -35,6 +35,7 @@ body {
     box-shadow: 0 0 10px #ded6f4;
     border-radius: 15px;
     overflow: hidden;
+    background-color: #ffffff;
 }
 
 .display {
@@ -44,7 +45,7 @@ body {
     height: 30vmin;
     background-color: #9c83dd;
     display: flex;
-    justify-content: end;
+    justify-content: space-around;
     align-items: flex-end;
     flex-direction: column;
     padding: 15px;
@@ -52,13 +53,17 @@ body {
 
 .operation {
     display: flex;
+    justify-content: center;
+    font-size: 25px;
+    flex-wrap: wrap;
 }
 
 .result {
     color: white;
     font-weight: 700;
-    font-size: 25px;
+    font-size: 45px;
     margin: 0;
+    flex-wrap: wrap;
 }
 
 .buttons {
@@ -68,9 +73,10 @@ body {
     gap: 5px;
     height: 40vmin;
     width: 100%;
-    background-color: #ffffff;
     padding: 5px;
 }
+
+.space {}
 
 .op-button,
 .num-button,
