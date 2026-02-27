@@ -72,6 +72,9 @@ function multiply(num1, num2) {
 }
 // divide
 function divide(num1, num2) {
+    if (Number(num2) === 0) {
+        return null;
+    }
     return num1 / num2;
 }
 // modulo
@@ -80,24 +83,36 @@ function modulo(num1, num2) {
 }
 
 /*call appropriate mathematical action*/
-function operate(num1, num2, operator) {
+function operate() {
+    let output;
     switch(operator) {
         case "+":
-            result.textContent = add(num1, num2);
+            output = add(num1, num2);
             break;
         case "-":
-            result.textContent = subtract(num1, num2);
+            output = subtract(num1, num2);
             break;
         case "*":
-            result.textContent = multiply(num1, num2);
+            output = multiply(num1, num2);
             break;
         case "/":
-            result.textContent = divide(num1, num2);
+            output = divide(num1, num2);
+            break;
         case "%":
-            result.textContent = modulo(num1, num2);
+            output = modulo(num1, num2);
+            break;
     }
 
-    clear(); // clear variables for next iteration
+    if (output === null) {
+        result.textContent = "...really?";
+        clear();
+    }
+    else {
+        clear(); // clear variables for next iteration
+        num1 = output;
+        result.textContent = output;
+        displayNum1.textContent = num1;
+    }
 }
 
 // add event listeners for calculator num buttons
@@ -116,6 +131,7 @@ numButtons.forEach((button => {
 opButtons.forEach(button => {
     button.addEventListener("click", e => {
         getOperator(e.target.textContent);
+        currentInput = "second"
     });
 });
 
@@ -124,10 +140,11 @@ keyButtons.forEach(button => {
     button.addEventListener("click", e => {
         switch (e.target.textContent) {
             case "=":
-                currentInput = "operating"
                 operate(num1, num2, operator);
                 break;
             case "AC":
+                clear();
+                result.textContent="";
                 break;
             case "B":
                 break;
@@ -144,17 +161,22 @@ function getFirstNum(value) {
 
 // get operator value and display in screen
 function getOperator(value) {
-    operator = value;
-    currentInput = "second";
-    displayOperator.textContent = operator;
-    console.log(operator);
+    // if num2 have already been chosen
+    // and operator is clicked again -> operate first
+    if (num2.length !== 0 && operator.length !== 0) {
+        operate(num1, num2, operator);
+    }
+    else {
+        operator = value;
+        displayOperator.textContent = operator;
+    }
 }
 
 // get second value and display in screen
 function getSecondNum(value) {
     num2 += value;
     displayNum2.textContent = num2;
-    console.log(num2);
+    console.log(num2.length);
 }
 
 // clear variables for next iteration 
@@ -163,7 +185,8 @@ function clear() {
     displayNum1.textContent = "";
     num2 = "";
     displayNum2.textContent = "";
+    operator = "";
     displayOperator.textContent = "";
+    currentInput = "first";
 }
-
 
