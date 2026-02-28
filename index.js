@@ -64,27 +64,31 @@ function add(num1, num2) {
 }
 // subtract
 function subtract(num1, num2) {
-    return num1 - num2;
+    return Number(num1) - Number(num2);
 }
 // multiply
 function multiply(num1, num2) {
-    return num1 * num2;
+    return Number(num1) * Number(num2);
 }
 // divide
 function divide(num1, num2) {
     if (Number(num2) === 0) {
         return null;
     }
-    return num1 / num2;
+    return Number(num1) / Number(num2);
 }
 // modulo
 function modulo(num1, num2) {
-    return num1 % num2;
+    return Number(num1) % Number(num2);
 }
 
 /*call appropriate mathematical action*/
 function operate() {
     let output;
+    // display nothing when calculation is invalid
+    if (num1.length === 0 || num2.length === 0){
+            return;
+        }
     switch(operator) {
         case "+":
             output = add(num1, num2);
@@ -103,24 +107,37 @@ function operate() {
             break;
     }
 
+    // round output when it contains long decimals
+    output =  Math.round(output * 100) / 100;
+
+    // snarky comment for zero division case
     if (output === null) {
         result.textContent = "...really?";
         clear();
     }
     else {
         clear(); // clear variables for next iteration
-        num1 = output;
-        result.textContent = output;
+        num1 = output; 
+        result.textContent = num1;
         displayNum1.textContent = num1;
+        currentInput = "result";
+        console.log(currentInput)
     }
 }
 
 // add event listeners for calculator num buttons
 numButtons.forEach((button => {
     button.addEventListener("click", e => {
-        if (currentInput == "first") {
+        // override result if user gives new number 
+        if (currentInput === "result" && operator.length === 0) {
+            clear()
             getFirstNum(e.target.textContent);
         }
+        // if user giving the first number, display it
+        else if (currentInput == "first") {
+            getFirstNum(e.target.textContent);
+        }
+        //if user giving the second number, display it
         else if (currentInput == "second") {
             getSecondNum(e.target.textContent);
         }
@@ -152,7 +169,6 @@ keyButtons.forEach(button => {
     });
 });
 
-
 // get first value and display in screen
 function getFirstNum(value) {
     num1 += value;
@@ -161,11 +177,15 @@ function getFirstNum(value) {
 
 // get operator value and display in screen
 function getOperator(value) {
-    // if num2 have already been chosen
-    // and operator is clicked again -> operate first
-    if (num2.length !== 0 && operator.length !== 0) {
+    // check if a number has already been chose
+    if (num1.length === 0) {
+        return;
+    }
+    // if operator is clicked after a pair of numbers - calculate them first
+    else if (num2.length !== 0 && operator.length !== 0) {
         operate(num1, num2, operator);
     }
+    // operator is clicked after first number
     else {
         operator = value;
         displayOperator.textContent = operator;
